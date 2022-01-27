@@ -1,5 +1,6 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 const clientDir = path.resolve(__dirname, 'client');
@@ -17,17 +18,22 @@ const SCSSRule = {
     test: /\.s[ac]ss$/,
     use: ['style-loader', 'css-loader', 'sass-loader']
 }
+const CSSRule = {
+    test: /\.css$/,
+    use: ['style-loader', 'css-loader']
+}
 
 module.exports = {
     entry: ['@babel/polyfill', path.resolve(clientDir, 'index.tsx')],
     output: {
-        path: path.resolve(distDir, 'dist'),
-        filename: '[name].[hash].js'
+        path: distDir,
+        filename: '[name].js'
     },
     module: {
         rules: [
             TSXRule,
-            SCSSRule
+            SCSSRule,
+            CSSRule
         ]
     },
     plugins: [
@@ -36,6 +42,9 @@ module.exports = {
     ],
     devServer: {
         port: 7000,
+        static: {
+            directory: publicDir
+        }
     },
     resolve: {
         extensions: ['.tsx', '.jsx', '.js', '.ts'],
