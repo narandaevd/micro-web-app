@@ -13,7 +13,6 @@ const StyledForm: React.FC = styled.form`
 `
 
 const Header: React.FC = styled.div`
-
 `
 
 const Content: React.FC = styled.div`
@@ -44,7 +43,7 @@ const ResetButton: React.FC<any> = styled.button`
     height: 52px;
 `
 
-const Number: React.FC = styled.span`
+const Phone: React.FC = styled.span`
     font-size: 40px;
 `
 
@@ -54,32 +53,71 @@ const InputPersonalData: React.FC<any> = styled.input`
 `
 
 function Form(): React.ReactElement {
+
+    const [phone, setPhone] = React.useState<Array<number>>([]);
+    const [isDisabled, setIsDisabled] = React.useState<boolean>(false);
+
+    function addDigitAtPhone(digit: number): void {
+        if (phone.length <= 9)
+            setPhone((prevPhone): Array<number> => [...prevPhone, digit]);
+    }
+
+    function resetPhone(e: MouseEvent): void {
+        setPhone((prevPhone): Array<number> => []);
+    }
+
   return (
     <StyledForm>
         <Header>Введите ваш номер мобильного телефона</Header>
         <Content>
-            <div><Number>+7(___)___-__-__</Number></div>
+            <div>
+                <Phone>+7(
+                    {phone[0] ? phone[0] : '_'}
+                    {phone[1] ? phone[1] : '_'}
+                    {phone[2] ? phone[2] : '_'}
+                    )
+                    {phone[3] ? phone[3] : '_'}
+                    {phone[4] ? phone[4] : '_'}
+                    {phone[5] ? phone[5] : '_'}
+                    -
+                    {phone[6] ? phone[6] : '_'}
+                    {phone[7] ? phone[7] : '_'}
+                    -
+                    {phone[8] ? phone[8] : '_'}
+                    {phone[9] ? phone[9] : '_'}
+                </Phone>
+            </div>
             <div><span>и с Вами свяжется наш менеджер для дальнейшей консультации</span></div>
         </Content>
         <Keyboard>
             {
                 [1, 2, 3, 4, 5, 6, 7, 8, 9, 'СТЕРЕТЬ', 0].map((element, index) => {
-                    if (element === 'СТЕРЕТЬ') 
+                    if (typeof element === 'string') 
                         return (
-                            <ResetButton type='button' key={index}>{element}</ResetButton>
+                            <ResetButton
+                                onClick={resetPhone} 
+                                type='button' 
+                                key={index}
+                            >{element}
+                            </ResetButton>
                         )
                     else 
                         return (
-                            <KeyboardButton type='button' key={index}>{element}</KeyboardButton>
+                            <KeyboardButton 
+                                onClick={() => addDigitAtPhone(element)}
+                                type='button' 
+                                key={index}
+                            >{element}
+                            </KeyboardButton>
                         )
                 })
             }
         </Keyboard>
         <PersonalData>
-                <InputPersonalData type='checkbox' />
+                <InputPersonalData type='checkbox' onClick={() => setIsDisabled((prev) => !prev)} />
                 <span>Персональные данные</span>
         </PersonalData>
-        <button>Отправить</button>
+        <button disabled={!isDisabled || phone.length <= 9}>Отправить</button>
     </StyledForm>
   );
 }
