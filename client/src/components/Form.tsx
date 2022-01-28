@@ -156,30 +156,35 @@ function Form(props: FormProps<setIsBannerOpenedFunction>): React.ReactElement {
     }
     
     async function onSubmit(): Promise<any> {
-        const fullPhone: string = phone.map(el => String(el)).join("");
-        const res: Response = await fetch(`http://apilayer.net/api/validate?access_key=28515150cebb6087a2744a7078b054a0&number=${fullPhone}&country_code=RU&format=1`)
-        const json: any = await res.json();
-        if (!json.valid) {
-            setIsOpenedErrorMes(() => true);
-            setPhoneColor(() => 'red');
-            setIsDisabled(() => false);
-            setTimeout(() => {
-                setPhoneColor(() => 'black');
-                setIsOpenedErrorMes(() => false);
-            }, 2000)
-        } else {
-            setPhoneColor(() => 'green');
-            setIsDisabled(() => false);
-            setTimeout(() => {
-                setPhoneColor(() => 'black');
-            }, 2000);
-            setIsSuccessfulSubmit(() => true);
+        try {
+            const fullPhone: string = '+7' + phone.map(el => String(el)).join("");
+            const res: Response = await fetch(`https://phonevalidation.abstractapi.com/v1/?api_key=e5063cc02afb41bba42d79c57181bf4b&phone=${fullPhone}`)
+            const json: any = await res.json();
+            console.log(json);
+            if (!json.valid) {
+                setIsOpenedErrorMes(() => true);
+                setPhoneColor(() => 'red');
+                setIsDisabled(() => false);
+                setTimeout(() => {
+                    setPhoneColor(() => 'black');
+                    setIsOpenedErrorMes(() => false);
+                }, 2000)
+            } else {
+                setPhoneColor(() => 'green');
+                setIsDisabled(() => false);
+                setTimeout(() => {
+                    setPhoneColor(() => 'black');
+                }, 2000);
+                setIsSuccessfulSubmit(() => true);
+            }
+            setPhone(() => []);
+            reset({personalData: false});
+            setIsDisabled(() => true);
+            setI(() => 0);
+            setJ(() => 0);
+        } catch (e) {
+            console.log(e);
         }
-        setPhone(() => []);
-        reset({personalData: false});
-        setIsDisabled(() => true);
-        setI(() => 0);
-        setJ(() => 0);
     }
 
     function changeCursor(key: string): void {
