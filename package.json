@@ -4,9 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "dev": "webpack-dev-server --mode development --open",
     "build": "webpack --mode production",
-    "app": "node server.js",
     "clean": "rimraf ./dist"
   },
   "repository": {

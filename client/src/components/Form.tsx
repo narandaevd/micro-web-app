@@ -157,7 +157,7 @@ function Form(props: FormProps<setIsBannerOpenedFunction>): React.ReactElement {
     
     async function onSubmit(): Promise<any> {
         const fullPhone: string = phone.map(el => String(el)).join("");
-        const res: Response = await fetch(`http://apilayer.net/api/validate?access_key=28515150cebb6087a2744a7078b054a0&number=${fullPhone}&country_code=RU&format=1`)
+        const res: Response = await fetch(`https://apilayer.net/api/validate?access_key=28515150cebb6087a2744a7078b054a0&number=${fullPhone}&country_code=RU&format=1`)
         const json: any = await res.json();
         if (!json.valid) {
             setIsOpenedErrorMes(() => true);
