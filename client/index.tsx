@@ -3,11 +3,8 @@ import ReactDOM from 'react-dom';
 import App from './src/components/App';
 import 'normalize.css';
 
-const application: React.ReactElement = (
+const application: React.ReactElement<{}> = (
     <App />
 );
 
-ReactDOM.render(
-    application,
-    document.getElementById('application')
-);
+ReactDOM.render(application, document.getElementById('application'));

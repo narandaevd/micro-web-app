@@ -12,22 +12,22 @@ const TSXRule = {
     test: /\.tsx?$/,
     exclude: /node_modules/,
     use: 'ts-loader',
-}
-
+};
 const SCSSRule = {
     test: /\.s[ac]ss$/,
     use: ['style-loader', 'css-loader', 'sass-loader']
-}
+};
 const CSSRule = {
     test: /\.css$/,
     use: ['style-loader', 'css-loader']
-}
+};
 
 module.exports = {
+    mode: 'development',
     entry: ['@babel/polyfill', path.resolve(clientDir, 'index.tsx')],
     output: {
         path: distDir,
-        filename: '[name].js'
+        filename: '[name].[contenthash].js'
     },
     module: {
         rules: [
@@ -39,6 +39,18 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({template: path.resolve(publicDir, 'index.html')}),
         new CleanWebpackPlugin(),
+        new CopyWebpackPlugin({
+            patterns: [
+              { 
+                  from: path.resolve(publicDir, 'videos'), 
+                  to: path.resolve(distDir, 'videos'), 
+              },
+              { 
+                  from: path.resolve(publicDir, 'img'), 
+                  to: path.resolve(distDir, 'img'), 
+              },
+            ],
+          }),
     ],
     devServer: {
         port: 7000,

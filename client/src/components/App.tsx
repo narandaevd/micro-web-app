@@ -4,10 +4,6 @@ import Form from './Form';
 import Banner from './Banner';
 import CloseIcon from '@mui/icons-material/Close';
 
-interface FormCloseBtn {
-  onClick: () => void
-}
-
 const FormCloseBtn: React.FC<React.PropsWithChildren<FormCloseBtn>> = styled.button`
   width: 88px;
   height: 52px;
@@ -31,33 +27,38 @@ const StyledVideoBanner: React.FC = styled.div`
     width: 1280px;
 `
 
-const StyledApp: React.FC<any> = styled.div`
+const StyledApp: React.FC = styled.div`
   position: relative;
   width: 1280px;
-  margin: 0 auto;
+  margin: 150px auto;
 `
 
+interface FormCloseBtn {
+  onClick: () => void
+}
+
 const App: React.FC<any> = () => {
-  const [isBannerOpened, setIsBannerOpened] = React.useState<any>(null);
-  const videoBlock = React.useRef<any>(null);
+  const [isBannerOpened, setIsBannerOpened] = React.useState<null | boolean>(null);
+  const videoBlock = React.useRef<HTMLVideoElement | null>(null);
   function launchTimeout(seconds: number) {
     setTimeout(() => {
-      setIsBannerOpened(true);
-      if (isBannerOpened === null)
+      if (isBannerOpened === null) {
         videoBlock.current.pause();
+        setIsBannerOpened(true);
+      }
     }, seconds * 1000);
   }
   return (
     <StyledApp>
         <StyledVideoBanner>
           <video
-            onPlay={() => launchTimeout(0)}
+            onPlay={() => launchTimeout(5)}
             ref={videoBlock} 
             controls 
             width={'1280px'} 
             height={'720px'}
           >
-              <source src="video.mp4" type="video/mp4" />
+              <source src="/videos/video.mp4" type="video/mp4" />
           </video>
         </StyledVideoBanner>
         {

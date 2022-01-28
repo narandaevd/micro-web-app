@@ -67,7 +67,7 @@ const KeyboardButton: React.FC<any> = styled.button`
 `
 
 const ResetButton: React.FC<any> = styled.button`
-    width: 180px;
+    width: 188px;
     height: 52px;
     background-color: inherit;
     border: 3px solid black;
@@ -89,13 +89,13 @@ const InputPersonalData: React.FC<any> = styled.input`
     height: 40px;
 `
 
-const ContentDescr: React.FC<any> = styled.div`
+const ContentDescr: React.FC = styled.div`
     margin-top: 15px;
     width: 400px;
     text-align: center;
 `
 
-const SectionSuccess: React.FC<any> = styled.div`
+const SectionSuccess: React.FC = styled.div`
     position: absolute;
     top: 0;
     width: 380px;
@@ -155,22 +155,24 @@ function Form(props: FormProps<setIsBannerOpenedFunction>): React.ReactElement {
         setPhone((): Array<number> => []);
     }
     
-    function onSubmit(): void {
-        const fullPhone: string = '+7' + phone.map(el => String(el)).join("");
-        if (fullPhone === '+70000000000') {
+    async function onSubmit(): Promise<any> {
+        const fullPhone: string = phone.map(el => String(el)).join("");
+        const res: Response = await fetch(`http://apilayer.net/api/validate?access_key=28515150cebb6087a2744a7078b054a0&number=${fullPhone}&country_code=RU&format=1`)
+        const json: any = await res.json();
+        if (!json.valid) {
             setIsOpenedErrorMes(() => true);
             setPhoneColor(() => 'red');
             setIsDisabled(() => false);
             setTimeout(() => {
                 setPhoneColor(() => 'black');
                 setIsOpenedErrorMes(() => false);
-            }, 1000)
+            }, 2000)
         } else {
             setPhoneColor(() => 'green');
             setIsDisabled(() => false);
             setTimeout(() => {
                 setPhoneColor(() => 'black');
-        }, 1000);
+            }, 2000);
             setIsSuccessfulSubmit(() => true);
         }
         setPhone(() => []);
@@ -222,7 +224,7 @@ function Form(props: FormProps<setIsBannerOpenedFunction>): React.ReactElement {
             changeCursor(e.key);
         else if (e.key === 'Enter') {
             if (KeyboardMatrix[i][j] === REMOVE) 
-                popDigitFromPhone();
+                resetPhone();
             else    
                 addDigitAtPhone(Number(KeyboardMatrix[i][j]));
         }
