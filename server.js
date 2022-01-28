@@ -3,7 +3,7 @@ const path =  require('path');
 const cors = require('cors');
 const favicon = require('express-favicon');
 
-const PORT = process.env.PORT | 3000;
+const { PORT=3000, LOCAL_ADDRESS='0.0.0.0' } = process.env
 const distDir = path.resolve(__dirname, 'dist');
 
 const app = express();
@@ -17,6 +17,6 @@ app.get("/", (req, res) => {
     res.sendFile(path.resolve(distDir, 'index.html'));
 })
 
-app.listen(PORT, () => {
+app.listen(PORT, LOCAL_ADDRESS, () => {
     console.log("Server listening on port " + PORT)
 });
